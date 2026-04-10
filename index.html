@@ -1,1 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CareConnect — Bridging Hearts & Hands</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --cream:#F5F0E8; --warm:#EDE5D5; --sand:#D4C4A8;
+  --rust:#C94F2C; --rust-d:#A33D20; --rust-l:#E8705A;
+  --teal:#1A6B6B; --teal-l:#2A9898;
+  --gold:#D4A843;
+  --ink:#1C1410; --ink-m:#3D2B1F; --ink-l:#6B5747;
+  --white:#FFFFFF;
+  --shadow:0 4px 24px rgba(28,20,16,.12);
+  --shadow-l:0 2px 8px rgba(28,20,16,.08);
+  --r:12px; --r-lg:20px;
+  --font-h:'Playfair Display',serif;
+  --font-b:'DM Sans',sans-serif;
+  --font-m:'DM Mono',monospace;
+  --trans:all .28s cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-b);background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-h)}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;font-family:var(--font-b)}
+input,textarea,select{font-family:var(--font-b)}
+ul{list-style:none}
 
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--warm)}
+::-webkit-scrollbar-thumb{background:var(--sand);border-radius:4px}
+
+.page{display:none;min-height:100vh;animation:fadeIn .4s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(245,240,232,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--sand);
+}
+.nav-logo{font-family:var(--font-h);font-size:1.5rem;font-weight:900;color:var(--rust);letter-spacing:-.02em;cursor:pointer}
+.nav-logo span{color:var(--teal)}
+.nav-links{display:flex;gap:8px;align-items:center}
+.nav-btn{padding:7px 18px;border-radius:30px;font-size:.85rem;font-weight:500;transition:var(--trans);color:var(--ink-m);background:transparent}
+.nav-btn:hover{background:var(--warm);color:var(--rust)}
+.nav-btn.active{background:var(--rust);color:#fff}
+.nav-cta{padding:8px 22px;border-radius:30px;font-size:.85rem;font-weight:600;background:var(--rust);color:#fff;transition:var(--trans);margin-left:8px}
+.nav-cta:hover{background:var(--rust-d);transform:translateY(-1px)}
+
+#landing{padding-top:64px}
+.hero{
+  position:relative;min-height:calc(100vh - 64px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 40px;text-align:center;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 20% 40%,rgba(201,79,44,.10) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 60%,rgba(26,107,107,.08) 0%,transparent 60%),var(--cream);
+}
+.hero-noise{
+  position:absolute;inset:0;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px;
+}
+.hero-content{position:relative;z-index:1;max-width:800px}
+.hero-badge{
+  display:inline-block;padding:6px 18px;border-radius:30px;
+  background:rgba(201,79,44,.1);border:1px solid rgba(201,79,44,.25);
+  font-size:.78rem;font-weight:600;color:var(--rust);letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:28px;
+}
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.05;color:var(--ink);margin-bottom:24px}
+.hero h1 em{color:var(--rust);font-style:normal}
+.hero h1 span{color:var(--teal)}
+.hero p{font-size:1.15rem;color:var(--ink-l);max-width:560px;margin:0 auto 40px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  padding:14px 32px;border-radius:50px;font-size:.95rem;font-weight:600;
+  background:var(--rust);color:#fff;transition:var(--trans);
+  box-shadow:0 4px 20px rgba(201,79,44,.35);
+}
+.btn-primary:hover{background:var(--rust-d);transform:translateY(-2px);box-shadow:0 6px 28px rgba(201,79,44,.45)}
+.btn-secondary{
+  padding:14px 32px;border-radius:50px;font-size:.95rem;font-weight:600;
+  background:transparent;color:var(--teal);border:2px solid var(--teal);transition:var(--trans);
+}
+.btn-secondary:hover{background:var(--teal);color:#fff;transform:translateY(-2px)}
+
+.hero-stats{
+  display:flex;gap:40px;justify-content:center;flex-wrap:wrap;
+  margin-top:64px;padding-top:40px;border-top:1px solid var(--sand);
+}
+.stat-item{text-align:center}
+.stat-num{font-family:var(--font-h);font-size:2.2rem;font-weight:900;color:var(--rust)}
+.stat-lbl{font-size:.8rem;color:var(--ink-l);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+.section{padding:80px 40px;max-width:1200px;margin:0 auto}
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rust);margin-bottom:12px}
+.section-title{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;color:var(--ink);margin-bottom:16px}
+.section-sub{font-size:1rem;color:var(--ink-l);max-width:540px;line-height:1.7}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px}
+.feature-card{
+  background:var(--white);border-radius:var(--r-lg);padding:32px;
+  border:1px solid var(--warm);transition:var(--trans);box-shadow:var(--shadow-l);
+}
+.feature-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.feat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px}
+.feat-icon.rust{background:rgba(201,79,44,.12)}
+.feat-icon.teal{background:rgba(26,107,107,.12)}
+.feat-icon.gold{background:rgba(212,168,67,.12)}
+.feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.feature-card p{font-size:.88rem;color:var(--ink-l);line-height:1.65}
+
+.how-section{background:var(--ink);padding:80px 40px;color:#fff}
+.how-inner{max-width:1200px;margin:0 auto}
+.how-section .section-label{color:var(--rust-l)}
+.how-section .section-title{color:var(--cream)}
+.steps-track{display:flex;gap:0;margin-top:48px;position:relative;flex-wrap:wrap}
+.steps-track::before{
+  content:'';position:absolute;top:32px;left:40px;right:40px;height:2px;
+  background:linear-gradient(90deg,var(--rust),var(--teal));opacity:.4;
+}
+.step{flex:1;min-width:160px;text-align:center;position:relative;padding-top:16px}
+.step-num{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--rust);color:#fff;font-family:var(--font-h);font-size:1.4rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  position:relative;z-index:1;box-shadow:0 0 0 6px rgba(201,79,44,.2);transition:var(--trans);
+}
+.step:hover .step-num{transform:scale(1.1);box-shadow:0 0 0 10px rgba(201,79,44,.25)}
+.step h4{font-size:.9rem;font-weight:600;color:var(--cream);margin-bottom:6px}
+.step p{font-size:.78rem;color:rgba(245,240,232,.55);line-height:1.6;padding:0 8px}
+
+.testimonials{padding:80px 40px}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:48px}
+.test-card{background:var(--white);border-radius:var(--r-lg);padding:28px;border-left:4px solid var(--rust);box-shadow:var(--shadow-l)}
+.test-text{font-size:.9rem;color:var(--ink-m);line-height:1.7;font-style:italic;margin-bottom:20px}
+.test-author{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff}
+.test-name{font-weight:600;font-size:.88rem;color:var(--ink)}
+.test-role{font-size:.75rem;color:var(--ink-l)}
+
+footer{background:var(--ink-m);color:rgba(245,240,232,.7);padding:40px;text-align:center;font-size:.85rem}
+footer .logo{font-family:var(--font-h);color:var(--rust-l);font-size:1.4rem;font-weight:900;margin-bottom:8px}
+
+.dashboard{display:flex;min-height:100vh;padding-top:64px}
+.sidebar{
+  width:240px;background:var(--ink);min-height:calc(100vh - 64px);
+  position:fixed;top:64px;left:0;padding:24px 0;
+  display:flex;flex-direction:column;
+  border-right:1px solid rgba(255,255,255,.06);
+  transition:var(--trans);z-index:100;
+}
+.sidebar-section{padding:0 16px;margin-bottom:8px}
+.sidebar-label{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.3);padding:8px 8px 4px}
+.sidebar-item{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;
+  color:rgba(245,240,232,.65);font-size:.88rem;font-weight:500;cursor:pointer;
+  transition:var(--trans);margin-bottom:2px;
+}
+.sidebar-item:hover{background:rgba(245,240,232,.07);color:var(--cream)}
+.sidebar-item.active{background:rgba(201,79,44,.2);color:var(--rust-l)}
+.sidebar-item .icon{width:20px;text-align:center;font-size:1rem}
+.sidebar-badge{margin-left:auto;background:var(--rust);color:#fff;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px}
+.main-content{margin-left:240px;flex:1;padding:32px;min-height:calc(100vh - 64px);background:var(--cream)}
+.page-header{margin-bottom:32px}
+.page-header h2{font-size:1.8rem;font-weight:900;color:var(--ink);margin-bottom:6px}
+.page-header p{color:var(--ink-l);font-size:.9rem}
+.breadcrumb{font-size:.75rem;color:var(--ink-l);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.breadcrumb span{color:var(--rust);font-weight:600}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--r);padding:20px;border:1px solid var(--warm);box-shadow:var(--shadow-l);transition:var(--trans)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.sc-label{font-size:.75rem;font-weight:600;color:var(--ink-l);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.sc-value{font-family:var(--font-h);font-size:2rem;font-weight:900;color:var(--ink)}
+.sc-change{font-size:.75rem;margin-top:4px;font-weight:500}
+.sc-change.up{color:var(--teal)}
+.sc-change.down{color:var(--rust)}
+.sc-change.orange{color:#9A7720}
+
+.card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--warm);box-shadow:var(--shadow-l);overflow:hidden;margin-bottom:20px}
+.card-header{padding:20px 24px;border-bottom:1px solid var(--warm);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:1rem;font-weight:700;color:var(--ink)}
+.card-body{padding:24px}
+.card-footer{padding:16px 24px;border-top:1px solid var(--warm);background:var(--cream);display:flex;align-items:center;justify-content:space-between}
+
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead tr{border-bottom:2px solid var(--warm)}
+thead th{text-align:left;padding:10px 12px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-l)}
+tbody tr{border-bottom:1px solid var(--warm);transition:var(--trans)}
+tbody tr:hover{background:var(--cream)}
+td{padding:12px;color:var(--ink-m);vertical-align:middle}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.badge.green{background:rgba(26,107,107,.12);color:var(--teal)}
+.badge.orange{background:rgba(212,168,67,.15);color:#9A7720}
+.badge.red{background:rgba(201,79,44,.12);color:var(--rust)}
+.badge.blue{background:rgba(26,107,107,.08);color:var(--teal-l)}
+
+.btn{padding:8px 18px;border-radius:8px;font-size:.83rem;font-weight:600;transition:var(--trans);display:inline-flex;align-items:center;gap:6px}
+.btn-sm{padding:5px 12px;font-size:.76rem}
+.btn-rust{background:var(--rust);color:#fff;box-shadow:0 2px 10px rgba(201,79,44,.25)}
+.btn-rust:hover{background:var(--rust-d);transform:translateY(-1px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-l)}
+.btn-outline{background:transparent;border:1.5px solid var(--sand);color:var(--ink-m)}
+.btn-outline:hover{border-color:var(--rust);color:var(--rust)}
+.btn-ghost{background:var(--warm);color:var(--ink-m)}
+.btn-ghost:hover{background:var(--sand)}
+
+.form-group{margin-bottom:18px}
+.form-label{font-size:.8rem;font-weight:600;color:var(--ink-m);display:block;margin-bottom:6px}
+.form-input{
+  width:100%;padding:10px 14px;border-radius:8px;
+  border:1.5px solid var(--sand);background:var(--cream);
+  font-size:.9rem;color:var(--ink);transition:var(--trans);outline:none;
+}
+.form-input:focus{border-color:var(--rust);background:var(--white);box-shadow:0 0 0 3px rgba(201,79,44,.1)}
+.form-input::placeholder{color:var(--sand)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--sand);margin-bottom:24px}
+.tab{padding:10px 20px;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--ink-l);border-bottom:2px solid transparent;margin-bottom:-1px;transition:var(--trans)}
+.tab.active{color:var(--rust);border-bottom-color:var(--rust)}
+.tab:hover:not(.active){color:var(--ink-m)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.progress-bar{background:var(--warm);border-radius:20px;height:8px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:20px;background:var(--rust);transition:width .6s ease}
+.progress-fill.teal{background:var(--teal)}
+.progress-fill.gold{background:var(--gold)}
+
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.opp-card{background:var(--white);border-radius:var(--r);padding:20px;border:1px solid var(--warm);transition:var(--trans);box-shadow:var(--shadow-l)}
+.opp-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--rust)}
+.opp-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.tag-teaching{background:rgba(26,107,107,.12);color:var(--teal)}
+.tag-events{background:rgba(212,168,67,.15);color:#9A7720}
+.tag-medical{background:rgba(201,79,44,.1);color:var(--rust)}
+.tag-sports{background:rgba(26,107,107,.08);color:var(--teal-l)}
+.opp-card h4{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.opp-card .org{font-size:.8rem;color:var(--ink-l);margin-bottom:12px;display:flex;align-items:center;gap:4px}
+.opp-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.opp-meta span{font-size:.75rem;color:var(--ink-l);display:flex;align-items:center;gap:4px}
+.match-score{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(26,107,107,.06);border-radius:8px;margin-bottom:12px}
+.match-pct{font-size:.8rem;font-weight:700;color:var(--teal)}
+
+.msg-list{display:flex;flex-direction:column;gap:12px;max-height:360px;overflow-y:auto;padding:4px}
+.msg-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;cursor:pointer;transition:var(--trans);border:1px solid transparent}
+.msg-item:hover,.msg-item.active{background:var(--warm);border-color:var(--sand)}
+.msg-avatar{width:42px;height:42px;border-radius:50%;background:var(--rust);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;flex-shrink:0}
+.msg-name{font-weight:600;font-size:.88rem;color:var(--ink)}
+.msg-preview{font-size:.78rem;color:var(--ink-l);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.msg-time{font-size:.7rem;color:var(--ink-l);margin-left:auto}
+.msg-unread{width:8px;height:8px;border-radius:50%;background:var(--rust);flex-shrink:0}
+
+.chat-window{display:flex;flex-direction:column;height:440px}
+.chat-messages{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.chat-bubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:.85rem;line-height:1.5}
+.bubble-in{background:var(--warm);color:var(--ink-m);border-bottom-left-radius:4px;align-self:flex-start}
+.bubble-out{background:var(--rust);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.bubble-meta{font-size:.65rem;margin-top:3px;opacity:.65}
+.chat-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--warm)}
+.chat-input-row .form-input{flex:1;margin:0}
+
+.notif-item{display:flex;gap:12px;padding:14px;border-bottom:1px solid var(--warm);transition:var(--trans);cursor:pointer}
+.notif-item:hover{background:var(--warm)}
+.notif-dot{width:10px;height:10px;border-radius:50%;background:var(--rust);margin-top:6px;flex-shrink:0}
+.notif-dot.read{background:var(--sand)}
+.notif-text{font-size:.85rem;color:var(--ink-m);line-height:1.5}
+.notif-time{font-size:.72rem;color:var(--ink-l);margin-top:3px}
+
+.impact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+.impact-tile{background:var(--ink);border-radius:var(--r);padding:24px;text-align:center}
+.impact-num{font-family:var(--font-h);font-size:2.4rem;font-weight:900;color:var(--rust-l)}
+.impact-lbl{font-size:.75rem;color:rgba(245,240,232,.55);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+
+.activity-feed{display:flex;flex-direction:column;gap:0}
+.act-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--warm);position:relative}
+.act-item::before{content:'';position:absolute;left:16px;top:36px;bottom:-14px;width:2px;background:var(--sand)}
+.act-item:last-child::before{display:none}
+.act-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;z-index:1}
+.act-icon.green{background:rgba(26,107,107,.15);color:var(--teal)}
+.act-icon.orange{background:rgba(212,168,67,.2);color:#9A7720}
+.act-icon.red{background:rgba(201,79,44,.12);color:var(--rust)}
+.act-text{font-size:.83rem;color:var(--ink-m);line-height:1.5}
+.act-text strong{color:var(--ink);font-weight:700}
+.act-time{font-size:.7rem;color:var(--ink-l);margin-top:2px}
+
+.verify-card{display:flex;align-items:center;gap:16px;padding:16px;background:var(--white);border-radius:var(--r);border:1px solid var(--warm);margin-bottom:12px;transition:var(--trans)}
+.verify-card:hover{border-color:var(--gold);box-shadow:var(--shadow-l)}
+.verify-info{flex:1}
+.verify-info h4{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:3px}
+.verify-info p{font-size:.78rem;color:var(--ink-l)}
+.verify-actions{display:flex;gap:8px}
+
+.map-placeholder{
+  background:var(--ink);border-radius:var(--r);
+  height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:rgba(245,240,232,.5);font-size:.85rem;gap:8px;position:relative;overflow:hidden;
+}
+.map-placeholder::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0px,rgba(255,255,255,.03) 1px,transparent 1px,transparent 40px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0px,rgba(255,255,255,.03) 1px,transparent 1px,transparent 40px);
+}
+.map-dot{width:12px;height:12px;border-radius:50%;background:var(--rust);box-shadow:0 0 0 4px rgba(201,79,44,.3),0 0 12px rgba(201,79,44,.4);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(201,79,44,.3),0 0 12px rgba(201,79,44,.4)}50%{box-shadow:0 0 0 8px rgba(201,79,44,.15),0 0 20px rgba(201,79,44,.3)}}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .sidebar{width:0;overflow:hidden}
+  .main-content{margin-left:0}
+  .form-row,.two-col,.three-col{grid-template-columns:1fr}
+  .hero{padding:40px 20px}
+  .section{padding:60px 20px}
+}
+
+.donation-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.tier-card{border-radius:var(--r);padding:24px;border:2px solid var(--warm);text-align:center;cursor:pointer;transition:var(--trans);background:var(--white)}
+.tier-card:hover,.tier-card.selected{border-color:var(--rust);background:rgba(201,79,44,.04)}
+.tier-amount{font-family:var(--font-h);font-size:2rem;font-weight:900;color:var(--rust)}
+.tier-name{font-weight:700;font-size:.9rem;color:var(--ink);margin:6px 0}
+.tier-desc{font-size:.78rem;color:var(--ink-l);line-height:1.5}
+
+.csr-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--ink);border-radius:var(--r);padding:24px;text-align:center}
+.kpi-val{font-family:var(--font-h);font-size:2.2rem;font-weight:900;color:var(--gold)}
+.kpi-lbl{font-size:.75rem;color:rgba(245,240,232,.55);margin-top:4px}
+
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:var(--ink);color:var(--cream);padding:12px 20px;
+  border-radius:10px;font-size:.85rem;font-weight:500;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  transform:translateY(80px);opacity:0;transition:var(--trans);
+  border-left:3px solid var(--rust);
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(28,20,16,.6);z-index:2000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--white);border-radius:var(--r-lg);padding:32px;
+  max-width:500px;width:100%;max-height:80vh;overflow-y:auto;
+  transform:scale(.95);transition:transform .3s;
+}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal h3{font-size:1.3rem;font-weight:900;margin-bottom:6px;color:var(--ink)}
+.modal p{font-size:.85rem;color:var(--ink-l);margin-bottom:20px}
+.modal-close{float:right;background:none;font-size:1.3rem;color:var(--ink-l);cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px}
+.modal-close:hover{background:var(--warm);color:var(--ink)}
+
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.bar{flex:1;border-radius:4px 4px 0 0;background:var(--rust);opacity:.7;transition:opacity .3s,height .6s ease;min-width:20px}
+.bar:hover{opacity:1}
+.bar.teal{background:var(--teal)}
+.bar-labels{display:flex;gap:8px;margin-top:6px}
+.bar-label{flex:1;text-align:center;font-size:.65rem;color:var(--ink-l);font-weight:500;min-width:20px}
+
+.search-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--white);border-radius:10px;border:1.5px solid var(--sand);margin-bottom:20px;transition:var(--trans)}
+.search-bar:focus-within{border-color:var(--rust);box-shadow:0 0 0 3px rgba(201,79,44,.1)}
+.search-bar input{flex:1;border:none;background:transparent;outline:none;font-size:.9rem;color:var(--ink)}
+.search-bar span{color:var(--sand);font-size:1rem}
+
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{padding:5px 14px;border-radius:20px;font-size:.78rem;font-weight:600;border:1.5px solid var(--sand);color:var(--ink-l);cursor:pointer;transition:var(--trans)}
+.chip.active,.chip:hover{background:var(--rust);color:#fff;border-color:var(--rust)}
+
+.profile-widget{display:flex;align-items:center;gap:12px;padding:16px;background:var(--warm);border-radius:var(--r);margin-bottom:8px}
+.profile-pic{width:48px;height:48px;border-radius:50%;background:var(--rust);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0}
+.profile-name{font-weight:700;font-size:.9rem;color:var(--ink)}
+.profile-role{font-size:.75rem;color:var(--ink-l)}
+
+.reg-page{
+  min-height:100vh;padding:80px 40px 40px;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 70% 60% at 10% 80%,rgba(26,107,107,.08) 0%,transparent 50%),var(--cream);
+}
+.reg-card{background:var(--white);border-radius:var(--r-lg);box-shadow:0 8px 48px rgba(28,20,16,.12);padding:40px;max-width:480px;width:100%}
+.reg-card h2{font-size:1.6rem;font-weight:900;color:var(--ink);margin-bottom:4px}
+.reg-card .sub{font-size:.85rem;color:var(--ink-l);margin-bottom:28px}
+.reg-tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--warm);border-radius:8px;padding:4px}
+.reg-tab{flex:1;padding:8px;border-radius:6px;text-align:center;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--ink-l);transition:var(--trans)}
+.reg-tab.active{background:var(--white);color:var(--rust);box-shadow:var(--shadow-l)}
+.social-signup{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.social-btn{padding:10px;border-radius:8px;border:1.5px solid var(--sand);display:flex;align-items:center;justify-content:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--ink-m);cursor:pointer;transition:var(--trans);background:var(--white)}
+.social-btn:hover{border-color:var(--rust);color:var(--rust)}
+.or-divider{display:flex;align-items:center;gap:12px;margin:20px 0;font-size:.75rem;color:var(--ink-l);font-weight:600}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--sand)}
+
+.text-center{text-align:center}
+.text-muted{color:var(--ink-l);font-size:.85rem}
+.mt-2{margin-top:8px}
+.mt-4{margin-top:16px}
+.mb-4{margin-bottom:16px}
+.flex{display:flex}
+.flex-center{display:flex;align-items:center;justify-content:center}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.gap-2{gap:8px}
+.gap-3{gap:12px}
+.hidden{display:none!important}
+
+.sub-panel{display:none}
+.sub-panel.active{display:block}
+
+.skill-tag{display:inline-block;padding:3px 10px;border-radius:6px;background:rgba(26,107,107,.1);color:var(--teal);font-size:.72rem;font-weight:600;margin:2px}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modal-title">Apply for Opportunity</h3>
+    <p id="modal-desc">Fill in a short message to the orphanage explaining why you'd like to volunteer.</p>
+    <div class="form-group">
+      <label class="form-label">Your Message</label>
+      <textarea class="form-input" rows="4" placeholder="I am interested because..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Availability</label>
+      <select class="form-input"><option>Weekends only</option><option>Weekdays</option><option>Flexible</option></select>
+    </div>
+    <button class="btn btn-rust" style="width:100%" onclick="submitApplication()">Submit Application ✓</button>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">Care<span>Connect</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('landing')">Home</button>
+    <button class="nav-btn" onclick="showPage('volunteer-dash')">Volunteer</button>
+    <button class="nav-btn" onclick="showPage('orphanage-dash')">Orphanage</button>
+    <button class="nav-btn" onclick="showPage('donor-dash')">Donor</button>
+    <button class="nav-btn" onclick="showPage('admin-dash')">Admin</button>
+    <button class="nav-cta" onclick="showPage('register')">Join Now →</button>
+  </div>
+</nav>
+
+<!-- ======================== LANDING ======================== -->
+<div class="page active" id="landing">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-noise"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ Bridging Hearts & Hands Since 2024</div>
+      <h1>Connect. <em>Volunteer.</em><br/><span>Change Lives.</span></h1>
+      <p>CareConnect is India's first structured platform linking orphanages with verified volunteers, compassionate donors, and corporate partners — with real-time coordination and measurable impact.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('register')">Join as Volunteer →</button>
+        <button class="btn-secondary" onclick="showPage('register')">Register Orphanage</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" id="ctr-children">0</div><div class="stat-lbl">Children Supported</div></div>
+      <div class="stat-item"><div class="stat-num" id="ctr-vol">0</div><div class="stat-lbl">Active Volunteers</div></div>
+      <div class="stat-item"><div class="stat-num" id="ctr-orph">0</div><div class="stat-lbl">Orphanages Onboarded</div></div>
+      <div class="stat-item"><div class="stat-num" id="ctr-hrs">0</div><div class="stat-lbl">Volunteer Hours</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Platform Features</div>
+    <div class="section-title">Everything you need,<br/>all in one place.</div>
+    <div class="section-sub">From smart volunteer matching to real-time communication and impact dashboards — CareConnect covers it all.</div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feat-icon rust">🎯</div><h3>Smart Matching System</h3><p>Our AI-powered algorithm matches volunteers with orphanages based on skills, location, and availability — ensuring the right people connect.</p></div>
+      <div class="feature-card"><div class="feat-icon teal">💬</div><h3>Real-time Communication</h3><p>In-platform messaging, notifications, and activity updates keep all stakeholders aligned throughout the volunteering journey.</p></div>
+      <div class="feature-card"><div class="feat-icon gold">📊</div><h3>Impact Dashboards</h3><p>Track volunteer hours, children helped, activities completed, and donations — all in transparent, shareable reports.</p></div>
+      <div class="feature-card"><div class="feat-icon rust">🏛️</div><h3>CSR Partnerships</h3><p>Corporates can fund programs, view branded impact reports, and meet CSR compliance goals through structured campaigns.</p></div>
+      <div class="feature-card"><div class="feat-icon teal">🎓</div><h3>Training & Certification</h3><p>Volunteers can complete paid courses in child psychology, first aid, and teaching to earn trust-building certifications.</p></div>
+      <div class="feature-card"><div class="feat-icon gold">🔒</div><h3>Verified & Safe</h3><p>Admin verification ensures every orphanage and volunteer is authenticated before going live on the platform.</p></div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <div class="how-inner">
+      <div class="section-label">How It Works</div>
+      <div class="section-title" style="color:var(--cream)">Six steps to making<br/>a real difference.</div>
+      <div class="steps-track">
+        <div class="step"><div class="step-num">1</div><h4>Register</h4><p>Orphanage or volunteer creates a verified profile</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Post Need</h4><p>Orphanage posts a volunteering requirement</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Match</h4><p>System auto-matches suitable volunteers</p></div>
+        <div class="step"><div class="step-num">4</div><h4>Apply</h4><p>Volunteers browse and apply for opportunities</p></div>
+        <div class="step"><div class="step-num">5</div><h4>Coordinate</h4><p>Communication happens through the platform</p></div>
+        <div class="step"><div class="step-num">6</div><h4>Impact</h4><p>Activity is recorded and impact is published</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonials section">
+    <div class="section-label">Success Stories</div>
+    <div class="section-title">Real impact, real lives.</div>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-text">"CareConnect changed everything for us. We used to struggle to find reliable teachers. Now we have 12 volunteers scheduled every month — all verified and committed."</div>
+        <div class="test-author"><div class="avatar" style="background:var(--teal)">SR</div><div><div class="test-name">Sister Rani</div><div class="test-role">Manager, Hope House Orphanage, Chennai</div></div></div>
+      </div>
+      <div class="test-card" style="border-left-color:var(--teal)">
+        <div class="test-text">"As a software engineer, I wanted to give back but didn't know where to start. The matching system connected me with an orphanage 3 km away. I've been teaching coding for 6 months now."</div>
+        <div class="test-author"><div class="avatar" style="background:var(--rust)">AK</div><div><div class="test-name">Arjun Kumar</div><div class="test-role">Volunteer, Bengaluru</div></div></div>
+      </div>
+      <div class="test-card" style="border-left-color:var(--gold)">
+        <div class="test-text">"Our company needed a structured way to fulfill CSR obligations with real impact data. CareConnect's dashboard gave us everything we needed — even the compliance reports."</div>
+        <div class="test-author"><div class="avatar" style="background:var(--gold);color:var(--ink)">PM</div><div><div class="test-name">Priya Menon</div><div class="test-role">CSR Head, TechVentures India</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--rust);padding:60px 40px;text-align:center">
+    <h2 style="font-family:var(--font-h);font-size:2.2rem;color:#fff;margin-bottom:12px">Ready to make a difference?</h2>
+    <p style="color:rgba(255,255,255,.75);margin-bottom:28px;font-size:1rem">Join thousands of volunteers and orphanages already using CareConnect.</p>
+    <button class="btn-secondary" style="border-color:#fff;color:#fff" onclick="showPage('register')">Get Started Free →</button>
+  </div>
+
+  <footer>
+    <div class="logo">CareConnect</div>
+    <p>© 2024 CareConnect. Built with ❤️ for India's children.</p>
+  </footer>
+</div>
+
+<!-- ======================== REGISTER ======================== -->
+<div class="page" id="register">
+  <div class="reg-page">
+    <div class="reg-card">
+      <h2>Join CareConnect</h2>
+      <div class="sub">Start making a difference today — it's free.</div>
+      <div class="reg-tabs">
+        <div class="reg-tab active" onclick="switchRegTab(this,'vol-form')">🙋 Volunteer</div>
+        <div class="reg-tab" onclick="switchRegTab(this,'orph-form')">🏠 Orphanage</div>
+        <div class="reg-tab" onclick="switchRegTab(this,'donor-form')">💖 Donor</div>
+      </div>
+      <div id="vol-form">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Arjun"/></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Kumar"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="arjun@email.com"/></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" placeholder="+91 9876543210"/></div>
+        <div class="form-group"><label class="form-label">City</label><input class="form-input" placeholder="Bengaluru"/></div>
+        <div class="form-group">
+          <label class="form-label">Primary Skill</label>
+          <select class="form-input">
+            <option>Teaching / Tutoring</option><option>Sports Coaching</option>
+            <option>Medical / Healthcare</option><option>Arts & Crafts</option>
+            <option>Technology</option><option>Counselling</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Create Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+        <button class="btn btn-rust" style="width:100%;padding:13px;font-size:.95rem" onclick="registerUser('volunteer')">Create Volunteer Account →</button>
+      </div>
+      <div id="orph-form" class="hidden">
+        <div class="form-group"><label class="form-label">Orphanage Name</label><input class="form-input" placeholder="Hope House Orphanage"/></div>
+        <div class="form-group"><label class="form-label">Registration Number</label><input class="form-input" placeholder="NGO-2024-XXXX"/></div>
+        <div class="form-group"><label class="form-label">Contact Person</label><input class="form-input" placeholder="Sister Rani"/></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="contact@hopehouse.org"/></div>
+        <div class="form-group"><label class="form-label">City</label><input class="form-input" placeholder="Chennai"/></div>
+        <div class="form-group"><label class="form-label">Number of Children</label><input class="form-input" type="number" placeholder="45"/></div>
+        <div class="form-group"><label class="form-label">Create Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+        <button class="btn btn-teal" style="width:100%;padding:13px;font-size:.95rem" onclick="registerUser('orphanage')">Register Orphanage →</button>
+      </div>
+      <div id="donor-form" class="hidden">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Priya"/></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Menon"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="priya@company.com"/></div>
+        <div class="form-group">
+          <label class="form-label">Donor Type</label>
+          <select class="form-input"><option>Individual Donor</option><option>Corporate / CSR</option><option>Foundation</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Create Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+        <button class="btn btn-rust" style="width:100%;padding:13px;font-size:.95rem" onclick="registerUser('donor')">Create Donor Account →</button>
+      </div>
+      <div class="or-divider">or sign up with</div>
+      <div class="social-signup">
+        <div class="social-btn" onclick="toast('Google signup coming soon!')">🔵 Google</div>
+        <div class="social-btn" onclick="toast('LinkedIn signup coming soon!')">🔷 LinkedIn</div>
+      </div>
+      <p class="text-center text-muted mt-2" style="font-size:.75rem">Already have an account? <a href="#" style="color:var(--rust);font-weight:600" onclick="toast('Login page coming soon!')">Sign In</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== VOLUNTEER DASHBOARD ======================== -->
+<div class="page" id="volunteer-dash">
+  <div class="dashboard">
+    <div class="sidebar">
+      <div style="padding:0 16px 16px">
+        <div class="profile-widget">
+          <div class="profile-pic">AK</div>
+          <div><div class="profile-name">Arjun Kumar</div><div class="profile-role">Volunteer · Bengaluru</div></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <div class="sidebar-item active" onclick="activeSidebarItem(this);showSubPanel('vol','overview')"><span class="icon">🏠</span>Overview</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('vol','opportunities')"><span class="icon">🔍</span>Browse Opportunities<span class="sidebar-badge">12</span></div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('vol','applications')"><span class="icon">📋</span>My Applications</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('vol','messages')"><span class="icon">💬</span>Messages<span class="sidebar-badge">3</span></div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('vol','impact')"><span class="icon">📊</span>My Impact</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('vol','profile')"><span class="icon">👤</span>My Profile</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto;padding-bottom:8px">
+        <div class="sidebar-item" onclick="showPage('landing')"><span class="icon">🚪</span>Back to Home</div>
+      </div>
+    </div>
+    <div class="main-content">
+      <!-- Overview -->
+      <div class="sub-panel active" id="vol-overview">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>Overview</span></div>
+          <h2>Welcome back, Arjun! 👋</h2>
+          <p>Here's your volunteering summary and recent activity.</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="sc-label">Hours Volunteered</div><div class="sc-value">48</div><div class="sc-change up">↑ +6 this month</div></div>
+          <div class="stat-card"><div class="sc-label">Applications Sent</div><div class="sc-value">7</div><div class="sc-change up">↑ 3 pending</div></div>
+          <div class="stat-card"><div class="sc-label">Sessions Done</div><div class="sc-value">18</div><div class="sc-change up">↑ 2 this week</div></div>
+          <div class="stat-card"><div class="sc-label">Match Score</div><div class="sc-value">94%</div><div class="sc-change up">↑ Top 5%</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Recent Activity</div></div>
+            <div class="card-body">
+              <div class="activity-feed">
+                <div class="act-item"><div class="act-icon green">✅</div><div><div class="act-text"><strong>Session completed</strong> at Sunshine Home — Math tutoring for Grade 5</div><div class="act-time">2 hours ago</div></div></div>
+                <div class="act-item"><div class="act-icon orange">📩</div><div><div class="act-text"><strong>Application approved</strong> for Weekend Coding Workshop at Hope House</div><div class="act-time">Yesterday, 3:40 PM</div></div></div>
+                <div class="act-item"><div class="act-icon green">💬</div><div><div class="act-text"><strong>New message</strong> from Sister Rani regarding next Saturday's session</div><div class="act-time">Yesterday, 11:00 AM</div></div></div>
+                <div class="act-item"><div class="act-icon red">🏅</div><div><div class="act-text"><strong>Certificate earned</strong> — Child Safety & Communication Module</div><div class="act-time">3 days ago</div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Recommended Opportunities</div><button class="btn btn-ghost btn-sm" onclick="activeSidebarItem(document.querySelectorAll('#volunteer-dash .sidebar-item')[1]);showSubPanel('vol','opportunities')">View All</button></div>
+            <div class="card-body" style="padding:12px">
+              <div class="opp-card" style="margin-bottom:12px">
+                <div class="opp-tag tag-teaching">Teaching</div>
+                <h4>Science Lab Sessions</h4>
+                <div class="org">📍 Bright Future Home, Bengaluru</div>
+                <div class="match-score"><span>Match Score</span><span class="match-pct">97% Match ✦</span></div>
+                <button class="btn btn-rust btn-sm" onclick="openModal('Apply: Science Lab Sessions','Tell Hope House why you are the right fit for this opportunity.')">Apply Now</button>
+              </div>
+              <div class="opp-card">
+                <div class="opp-tag tag-events">Event</div>
+                <h4>Annual Sports Day Coordinator</h4>
+                <div class="org">📍 Rainbow Kids, Bengaluru</div>
+                <div class="match-score"><span>Match Score</span><span class="match-pct">88% Match</span></div>
+                <button class="btn btn-rust btn-sm" onclick="openModal('Apply: Sports Day Coordinator','Describe your event management experience.')">Apply Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunities -->
+      <div class="sub-panel" id="vol-opportunities">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>Browse Opportunities</span></div>
+          <h2>Find Your Match</h2>
+          <p>Opportunities matched to your skills and location.</p>
+        </div>
+        <div class="search-bar"><span>🔍</span><input placeholder="Search by skill, orphanage or city..." oninput="filterOpps(this.value)"/></div>
+        <div class="filter-chips">
+          <div class="chip active" onclick="toggleChip(this,'All')">All</div>
+          <div class="chip" onclick="toggleChip(this,'Teaching')">Teaching</div>
+          <div class="chip" onclick="toggleChip(this,'Medical')">Medical</div>
+          <div class="chip" onclick="toggleChip(this,'Events')">Events</div>
+          <div class="chip" onclick="toggleChip(this,'Sports')">Sports</div>
+        </div>
+        <div class="opp-grid" id="opp-grid"></div>
+      </div>
+
+      <!-- Applications -->
+      <div class="sub-panel" id="vol-applications">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>My Applications</span></div>
+          <h2>My Applications</h2>
+          <p>Track the status of all your volunteering applications.</p>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table>
+              <thead><tr><th>Opportunity</th><th>Orphanage</th><th>Applied On</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Math Tutoring (Grade 4-6)</strong></td><td>Sunshine Home</td><td>2 Jan 2025</td><td><span class="badge green">✓ Approved</span></td><td><button class="btn btn-outline btn-sm" onclick="toast('Viewing application...')">View</button></td></tr>
+                <tr><td><strong>Weekend Coding Workshop</strong></td><td>Hope House</td><td>5 Jan 2025</td><td><span class="badge green">✓ Approved</span></td><td><button class="btn btn-outline btn-sm" onclick="toast('Viewing application...')">View</button></td></tr>
+                <tr><td><strong>Sports Day Coordinator</strong></td><td>Rainbow Kids</td><td>8 Jan 2025</td><td><span class="badge orange">⏳ Pending</span></td><td><button class="btn btn-outline btn-sm" onclick="toast('Viewing application...')">View</button></td></tr>
+                <tr><td><strong>English Reading Club</strong></td><td>Star Orphanage</td><td>10 Jan 2025</td><td><span class="badge orange">⏳ Pending</span></td><td><button class="btn btn-outline btn-sm" onclick="toast('Viewing application...')">View</button></td></tr>
+                <tr><td><strong>Science Lab Demos</strong></td><td>Bright Kids Home</td><td>12 Jan 2025</td><td><span class="badge red">✗ Declined</span></td><td><button class="btn btn-outline btn-sm" onclick="toast('Viewing feedback...')">Feedback</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="sub-panel" id="vol-messages">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>Messages</span></div>
+          <h2>Messages</h2>
+          <p>In-platform communication with orphanages.</p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Conversations</div></div>
+            <div class="card-body" style="padding:12px">
+              <div class="msg-list">
+                <div class="msg-item active" onclick="loadChat('Sister Rani · Hope House','vol')">
+                  <div class="msg-avatar">SH</div>
+                  <div style="flex:1;min-width:0"><div class="msg-name">Sister Rani · Hope House</div><div class="msg-preview">Looking forward to Saturday's session!</div></div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="msg-time">2h ago</div><div class="msg-unread"></div></div>
+                </div>
+                <div class="msg-item" onclick="loadChat('Mr. Suresh · Sunshine Kids','vol')">
+                  <div class="msg-avatar" style="background:var(--teal)">SK</div>
+                  <div style="flex:1;min-width:0"><div class="msg-name">Mr. Suresh · Sunshine Kids</div><div class="msg-preview">Can you bring a projector?</div></div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="msg-time">1d ago</div><div class="msg-unread"></div></div>
+                </div>
+                <div class="msg-item" onclick="loadChat('Ms. Lakshmi · Rainbow Home','vol')">
+                  <div class="msg-avatar" style="background:var(--gold);color:var(--ink)">LK</div>
+                  <div style="flex:1;min-width:0"><div class="msg-name">Ms. Lakshmi · Rainbow Home</div><div class="msg-preview">Thank you for last week!</div></div>
+                  <div><div class="msg-time">3d ago</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" id="vol-chat-title">Sister Rani · Hope House</div></div>
+            <div class="chat-window">
+              <div class="chat-messages" id="vol-chat-messages">
+                <div class="chat-bubble bubble-in">Hi Arjun! Are you confirmed for this Saturday's coding session?<div class="bubble-meta">Sister Rani · 2h ago</div></div>
+                <div class="chat-bubble bubble-out">Yes, I'll be there by 10 AM! Should I bring laptops?<div class="bubble-meta">You · 1h ago</div></div>
+                <div class="chat-bubble bubble-in">Perfect! We have 8 computers. Looking forward to it! 😊<div class="bubble-meta">Sister Rani · 45m ago</div></div>
+              </div>
+              <div class="chat-input-row">
+                <input class="form-input" id="vol-chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendMsg('vol')"/>
+                <button class="btn btn-rust" onclick="sendMsg('vol')">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact -->
+      <div class="sub-panel" id="vol-impact">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>My Impact</span></div>
+          <h2>My Impact</h2>
+          <p>Visualizing the difference you've made.</p>
+        </div>
+        <div class="impact-grid" style="margin-bottom:24px">
+          <div class="impact-tile"><div class="impact-num">48</div><div class="impact-lbl">Hours Given</div></div>
+          <div class="impact-tile"><div class="impact-num">18</div><div class="impact-lbl">Sessions</div></div>
+          <div class="impact-tile"><div class="impact-num">3</div><div class="impact-lbl">Orphanages</div></div>
+          <div class="impact-tile"><div class="impact-num">62</div><div class="impact-lbl">Children Reached</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Monthly Hours (2025)</div></div>
+            <div class="card-body">
+              <div class="bar-chart" id="vol-bar-chart"></div>
+              <div class="bar-labels" id="vol-bar-labels"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Skills Contributed</div></div>
+            <div class="card-body">
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Technology / Coding</span><span style="font-size:.8rem;color:var(--ink-l)">60%</span></div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></div>
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Mathematics Tutoring</span><span style="font-size:.8rem;color:var(--ink-l)">30%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:30%"></div></div></div>
+              <div><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Event Coordination</span><span style="font-size:.8rem;color:var(--ink-l)">10%</span></div><div class="progress-bar"><div class="progress-fill gold" style="width:10%"></div></div></div>
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--warm)">
+                <div class="sc-label">Certificates Earned</div>
+                <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
+                  <div class="skill-tag">Child Safety ✓</div><div class="skill-tag">First Aid ✓</div><div class="skill-tag">Teaching Basics ✓</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="sub-panel" id="vol-profile">
+        <div class="page-header">
+          <div class="breadcrumb">Volunteer Dashboard → <span>My Profile</span></div>
+          <h2>My Profile</h2>
+          <p>Update your skills and availability.</p>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Personal Information</div><button class="btn btn-ghost btn-sm" onclick="toast('Profile saved!')">Save Changes</button></div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Arjun"/></div>
+                <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Kumar"/></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="arjun.kumar@email.com"/></div>
+              <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="+91 9876543210"/></div>
+              <div class="form-group"><label class="form-label">City</label><input class="form-input" value="Bengaluru"/></div>
+              <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input" rows="3">Software engineer passionate about teaching coding to underprivileged children.</textarea></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Skills & Availability</div></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Skills</label>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+                  <div class="skill-tag">JavaScript ✓</div><div class="skill-tag">Python ✓</div><div class="skill-tag">Mathematics ✓</div><div class="skill-tag">English ✓</div>
+                  <button class="btn btn-ghost btn-sm" onclick="toast('Skill management coming soon!')">+ Add Skill</button>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label">Availability</label><select class="form-input"><option>Weekends (Sat & Sun)</option><option>Weekday evenings</option><option>Flexible</option></select></div>
+              <div class="form-group"><label class="form-label">Travel Radius (km)</label><input class="form-input" value="10" type="number"/></div>
+              <div class="form-group"><label class="form-label">Notification Preferences</label><select class="form-input"><option>Email + In-app</option><option>In-app only</option><option>SMS + Email</option></select></div>
+              <button class="btn btn-rust" onclick="toast('Preferences saved!')">Update Preferences</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== ORPHANAGE DASHBOARD ======================== -->
+<div class="page" id="orphanage-dash">
+  <div class="dashboard">
+    <div class="sidebar">
+      <div style="padding:0 16px 16px">
+        <div class="profile-widget">
+          <div class="profile-pic" style="background:var(--teal)">HH</div>
+          <div><div class="profile-name">Hope House</div><div class="profile-role">Orphanage · Chennai</div></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Manage</div>
+        <div class="sidebar-item active" onclick="activeSidebarItem(this);showSubPanel('orph','overview')"><span class="icon">🏠</span>Overview</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('orph','post-req')"><span class="icon">📝</span>Post Requirement</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('orph','applications')"><span class="icon">👥</span>Volunteer Applications<span class="sidebar-badge">5</span></div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('orph','messages')"><span class="icon">💬</span>Messages</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('orph','impact')"><span class="icon">📊</span>Impact Report</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto;padding-bottom:8px">
+        <div class="sidebar-item" onclick="showPage('landing')"><span class="icon">🚪</span>Back to Home</div>
+      </div>
+    </div>
+    <div class="main-content">
+      <!-- Overview -->
+      <div class="sub-panel active" id="orph-overview">
+        <div class="page-header">
+          <div class="breadcrumb">Orphanage Dashboard → <span>Overview</span></div>
+          <h2>Hope House Dashboard</h2>
+          <p>Manage volunteers, requirements, and track your impact.</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="sc-label">Active Volunteers</div><div class="sc-value">12</div><div class="sc-change up">↑ +3 this month</div></div>
+          <div class="stat-card"><div class="sc-label">Open Requirements</div><div class="sc-value">4</div><div class="sc-change orange">2 urgent</div></div>
+          <div class="stat-card"><div class="sc-label">Pending Applications</div><div class="sc-value">5</div><div class="sc-change up">Review needed</div></div>
+          <div class="stat-card"><div class="sc-label">Children Enrolled</div><div class="sc-value">47</div><div class="sc-change up">↑ Full capacity</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Open Requirements</div><button class="btn btn-rust btn-sm" onclick="activeSidebarItem(document.querySelectorAll('#orphanage-dash .sidebar-item')[1]);showSubPanel('orph','post-req')">+ Post New</button></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>Requirement</th><th>Type</th><th>Applications</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Weekend Coding Classes</strong></td><td><span class="badge blue">Teaching</span></td><td>3</td><td><span class="badge green">Open</span></td></tr>
+                  <tr><td><strong>Annual Sports Day Help</strong></td><td><span class="badge orange">Event</span></td><td>2</td><td><span class="badge green">Open</span></td></tr>
+                  <tr><td><strong>General Health Checkup</strong></td><td><span class="badge red">Medical</span></td><td>0</td><td><span class="badge red">Urgent</span></td></tr>
+                  <tr><td><strong>English Speaking Practice</strong></td><td><span class="badge blue">Teaching</span></td><td>1</td><td><span class="badge green">Open</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Volunteer Activity</div></div>
+            <div class="card-body">
+              <div class="activity-feed">
+                <div class="act-item"><div class="act-icon green">✅</div><div><div class="act-text"><strong>Arjun Kumar</strong> completed Math tutoring session — 2 hours</div><div class="act-time">2 hours ago</div></div></div>
+                <div class="act-item"><div class="act-icon orange">📩</div><div><div class="act-text"><strong>Meera Nair</strong> applied for Medical Checkup volunteer slot</div><div class="act-time">4 hours ago</div></div></div>
+                <div class="act-item"><div class="act-icon green">💰</div><div><div class="act-text"><strong>₹5,000 donation</strong> received from Priya Menon</div><div class="act-time">Yesterday</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Nearby Volunteer Map</div></div>
+          <div class="card-body">
+            <div class="map-placeholder">
+              <div class="map-dot"></div>
+              <span style="z-index:1">📍 12 volunteers within 10km of your location</span>
+              <span style="z-index:1;font-size:.75rem">Chennai, Tamil Nadu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Requirement -->
+      <div class="sub-panel" id="orph-post-req">
+        <div class="page-header">
+          <div class="breadcrumb">Orphanage Dashboard → <span>Post Requirement</span></div>
+          <h2>Post a Requirement</h2>
+          <p>Describe what help you need and the system will find matching volunteers.</p>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group"><label class="form-label">Requirement Title</label><input class="form-input" placeholder="e.g. Weekend Math Tutoring for Grade 5-7"/></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Category</label><select class="form-input"><option>Teaching / Tutoring</option><option>Medical / Healthcare</option><option>Sports / Fitness</option><option>Events / Celebration</option><option>Arts & Crafts</option><option>Donations / Resources</option></select></div>
+              <div class="form-group"><label class="form-label">Urgency</label><select class="form-input"><option>Normal</option><option>Urgent</option><option>Flexible</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Start Date</label><input class="form-input" type="date"/></div>
+              <div class="form-group"><label class="form-label">End Date</label><input class="form-input" type="date"/></div>
+            </div>
+            <div class="form-group"><label class="form-label">Schedule</label><input class="form-input" placeholder="e.g. Every Saturday 10AM–12PM"/></div>
+            <div class="form-group"><label class="form-label">Number of Volunteers Needed</label><input class="form-input" type="number" value="2"/></div>
+            <div class="form-group"><label class="form-label">Skills Required</label><input class="form-input" placeholder="e.g. Mathematics, Patience, English speaking"/></div>
+            <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="4" placeholder="Describe the activity, the children involved, and any special requirements..."></textarea></div>
+            <div class="form-group"><label class="form-label">Target Age Group</label><select class="form-input"><option>All ages (3–18)</option><option>Young children (3–8)</option><option>Middle (9–13)</option><option>Teens (14–18)</option></select></div>
+            <div style="display:flex;gap:12px">
+              <button class="btn btn-rust" onclick="postRequirement()">🚀 Post Requirement</button>
+              <button class="btn btn-outline" onclick="toast('Saved as draft')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applications -->
+      <div class="sub-panel" id="orph-applications">
+        <div class="page-header">
+          <div class="breadcrumb">Orphanage Dashboard → <span>Applications</span></div>
+          <h2>Volunteer Applications</h2>
+          <p>Review and approve volunteers for your requirements.</p>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table>
+              <thead><tr><th>Volunteer</th><th>For Requirement</th><th>Match</th><th>Skills</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Arjun Kumar</strong><br/><span style="font-size:.75rem;color:var(--ink-l)">Bengaluru · 3km</span></td>
+                  <td>Coding Classes</td><td><span style="color:var(--teal);font-weight:700">97%</span></td>
+                  <td><span class="skill-tag">JS</span><span class="skill-tag">Python</span></td>
+                  <td><span class="badge green">Approved</span></td>
+                  <td><button class="btn btn-outline btn-sm" onclick="toast('Viewing profile...')">Profile</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Meera Nair</strong><br/><span style="font-size:.75rem;color:var(--ink-l)">Chennai · 5km</span></td>
+                  <td>Health Checkup</td><td><span style="color:var(--teal);font-weight:700">92%</span></td>
+                  <td><span class="skill-tag">MBBS</span><span class="skill-tag">First Aid</span></td>
+                  <td><span class="badge orange" id="orph-app-1-status">Pending</span></td>
+                  <td style="display:flex;gap:4px;padding:12px">
+                    <button class="btn btn-teal btn-sm" onclick="approveApp(this,'orph-app-1-status')">✓ Approve</button>
+                    <button class="btn btn-outline btn-sm" onclick="declineApp(this,'orph-app-1-status')">✗</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Rahul Sharma</strong><br/><span style="font-size:.75rem;color:var(--ink-l)">Chennai · 7km</span></td>
+                  <td>Sports Day</td><td><span style="color:var(--gold);font-weight:700">85%</span></td>
+                  <td><span class="skill-tag">Sports</span><span class="skill-tag">Events</span></td>
+                  <td><span class="badge orange" id="orph-app-2-status">Pending</span></td>
+                  <td style="display:flex;gap:4px;padding:12px">
+                    <button class="btn btn-teal btn-sm" onclick="approveApp(this,'orph-app-2-status')">✓ Approve</button>
+                    <button class="btn btn-outline btn-sm" onclick="declineApp(this,'orph-app-2-status')">✗</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="sub-panel" id="orph-messages">
+        <div class="page-header">
+          <div class="breadcrumb">Orphanage Dashboard → <span>Messages</span></div>
+          <h2>Messages</h2>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Volunteers</div></div>
+            <div class="card-body" style="padding:12px">
+              <div class="msg-list">
+                <div class="msg-item active" onclick="loadChat('Arjun Kumar','orph')">
+                  <div class="msg-avatar">AK</div>
+                  <div style="flex:1;min-width:0"><div class="msg-name">Arjun Kumar</div><div class="msg-preview">I'll be there by 10 AM!</div></div>
+                  <div class="msg-time">1h ago</div>
+                </div>
+                <div class="msg-item" onclick="loadChat('Meera Nair','orph')">
+                  <div class="msg-avatar" style="background:var(--gold);color:var(--ink)">MN</div>
+                  <div style="flex:1;min-width:0"><div class="msg-name">Meera Nair</div><div class="msg-preview">Can I reschedule to Sunday?</div></div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="msg-time">3h ago</div><div class="msg-unread"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" id="orph-chat-title">Arjun Kumar</div></div>
+            <div class="chat-window">
+              <div class="chat-messages" id="orph-chat-messages">
+                <div class="chat-bubble bubble-in">Hi Arjun! Are you confirmed for this Saturday?<div class="bubble-meta">You · 2h ago</div></div>
+                <div class="chat-bubble bubble-out">Yes, I'll be there by 10 AM! Should I bring laptops?<div class="bubble-meta">Arjun · 1h ago</div></div>
+                <div class="chat-bubble bubble-in">Perfect! We have 8 computers. 😊<div class="bubble-meta">You · 45m ago</div></div>
+              </div>
+              <div class="chat-input-row">
+                <input class="form-input" id="orph-chat-input" placeholder="Reply..." onkeypress="if(event.key==='Enter')sendMsg('orph')"/>
+                <button class="btn btn-rust" onclick="sendMsg('orph')">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact -->
+      <div class="sub-panel" id="orph-impact">
+        <div class="page-header">
+          <div class="breadcrumb">Orphanage Dashboard → <span>Impact Report</span></div>
+          <h2>Impact Report</h2>
+          <p>Share your impact with donors and partners.</p>
+        </div>
+        <div class="impact-grid" style="margin-bottom:24px">
+          <div class="impact-tile"><div class="impact-num">47</div><div class="impact-lbl">Children</div></div>
+          <div class="impact-tile"><div class="impact-num">12</div><div class="impact-lbl">Volunteers</div></div>
+          <div class="impact-tile"><div class="impact-num">284</div><div class="impact-lbl">Volunteer Hours</div></div>
+          <div class="impact-tile"><div class="impact-num">₹1.2L</div><div class="impact-lbl">Donations Received</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Activities Completed</div></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>Activity</th><th>Volunteer</th><th>Hours</th><th>Children</th></tr></thead>
+                <tbody>
+                  <tr><td>Math Tutoring</td><td>Arjun Kumar</td><td>24</td><td>18</td></tr>
+                  <tr><td>Coding Workshop</td><td>Arjun Kumar</td><td>12</td><td>12</td></tr>
+                  <tr><td>Health Checkup</td><td>Dr. Meera</td><td>8</td><td>47</td></tr>
+                  <tr><td>Sports Day</td><td>Rahul Sharma</td><td>6</td><td>47</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Monthly Volunteer Hours</div></div>
+            <div class="card-body">
+              <div class="bar-chart" id="orph-bar-chart"></div>
+              <div class="bar-labels" id="orph-bar-labels"></div>
+              <div style="margin-top:20px">
+                <button class="btn btn-rust btn-sm" onclick="toast('PDF report downloaded!')">📥 Download Report</button>
+                <button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="toast('Report shared with donors!')">📤 Share with Donors</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DONOR DASHBOARD ======================== -->
+<div class="page" id="donor-dash">
+  <div class="dashboard">
+    <div class="sidebar">
+      <div style="padding:0 16px 16px">
+        <div class="profile-widget">
+          <div class="profile-pic" style="background:var(--gold);color:var(--ink)">PM</div>
+          <div><div class="profile-name">Priya Menon</div><div class="profile-role">Donor · Corporate</div></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Donor Portal</div>
+        <div class="sidebar-item active" onclick="activeSidebarItem(this);showSubPanel('donor','overview')"><span class="icon">🏠</span>Overview</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('donor','donate')"><span class="icon">💖</span>Donate Now</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('donor','history')"><span class="icon">📋</span>Donation History</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('donor','csr')"><span class="icon">🏢</span>CSR Dashboard</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('donor','orphanages')"><span class="icon">🏠</span>Browse Orphanages</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto;padding-bottom:8px">
+        <div class="sidebar-item" onclick="showPage('landing')"><span class="icon">🚪</span>Back to Home</div>
+      </div>
+    </div>
+    <div class="main-content">
+      <!-- Overview -->
+      <div class="sub-panel active" id="donor-overview">
+        <div class="page-header">
+          <div class="breadcrumb">Donor Portal → <span>Overview</span></div>
+          <h2>Your Impact, Priya 💖</h2>
+          <p>Every rupee you give changes a life.</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="sc-label">Total Donated</div><div class="sc-value">₹52K</div><div class="sc-change up">↑ This year</div></div>
+          <div class="stat-card"><div class="sc-label">Orphanages Supported</div><div class="sc-value">4</div><div class="sc-change up">↑ +1 recently</div></div>
+          <div class="stat-card"><div class="sc-label">Children Impacted</div><div class="sc-value">143</div><div class="sc-change up">Across 4 homes</div></div>
+          <div class="stat-card"><div class="sc-label">Donor Rank</div><div class="sc-value">Gold</div><div class="sc-change up">🏅 Top 10%</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Recent Donations</div></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>Orphanage</th><th>Amount</th><th>Date</th><th>Receipt</th></tr></thead>
+                <tbody>
+                  <tr><td>Hope House, Chennai</td><td><strong>₹5,000</strong></td><td>8 Jan 2025</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Receipt downloaded!')">📄 PDF</button></td></tr>
+                  <tr><td>Rainbow Kids, Bengaluru</td><td><strong>₹10,000</strong></td><td>1 Jan 2025</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Receipt downloaded!')">📄 PDF</button></td></tr>
+                  <tr><td>Sunshine Home, Chennai</td><td><strong>₹7,500</strong></td><td>20 Dec 2024</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Receipt downloaded!')">📄 PDF</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Impact This Month</div></div>
+            <div class="card-body">
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Education</span><span style="font-size:.8rem;color:var(--ink-l)">45%</span></div><div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div></div>
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Healthcare</span><span style="font-size:.8rem;color:var(--ink-l)">30%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:30%"></div></div></div>
+              <div><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Nutrition & Supplies</span><span style="font-size:.8rem;color:var(--ink-l)">25%</span></div><div class="progress-bar"><div class="progress-fill gold" style="width:25%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donate -->
+      <div class="sub-panel" id="donor-donate">
+        <div class="page-header">
+          <div class="breadcrumb">Donor Portal → <span>Donate Now</span></div>
+          <h2>Make a Donation</h2>
+          <p>100% of your donation reaches the orphanage (minus 3% platform fee).</p>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Select Orphanage</label>
+              <select class="form-input"><option>Hope House, Chennai</option><option>Sunshine Home, Chennai</option><option>Rainbow Kids, Bengaluru</option><option>Bright Future, Hyderabad</option><option>Any (Platform decides)</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Select Amount</label>
+              <div class="donation-tiers">
+                <div class="tier-card selected" onclick="selectTier(this,500)"><div class="tier-amount">₹500</div><div class="tier-name">Supporter</div><div class="tier-desc">Funds one child's books for a month</div></div>
+                <div class="tier-card" onclick="selectTier(this,2000)"><div class="tier-amount">₹2,000</div><div class="tier-name">Champion</div><div class="tier-desc">Covers a child's monthly nutrition</div></div>
+                <div class="tier-card" onclick="selectTier(this,10000)"><div class="tier-amount">₹10,000</div><div class="tier-name">Guardian</div><div class="tier-desc">Sponsors a full activity program</div></div>
+                <div class="tier-card" onclick="selectTier(this,'custom')"><div class="tier-amount">✏️</div><div class="tier-name">Custom</div><div class="tier-desc">Choose your own amount</div></div>
+              </div>
+            </div>
+            <div class="form-group" id="custom-amount-group" style="display:none">
+              <label class="form-label">Enter Amount (₹)</label>
+              <input class="form-input" id="custom-amount" type="number" placeholder="5000" oninput="updateDonationCalc()"/>
+            </div>
+            <div style="background:var(--warm);border-radius:10px;padding:16px;margin:20px 0">
+              <div class="flex-between mb-4"><span style="font-size:.9rem">Donation Amount</span><span id="calc-amount" style="font-weight:700">₹500</span></div>
+              <div class="flex-between mb-4"><span style="font-size:.85rem;color:var(--ink-l)">Platform Fee (3%)</span><span id="calc-fee" style="color:var(--ink-l)">₹15</span></div>
+              <div class="flex-between" style="border-top:1px solid var(--sand);padding-top:10px;margin-top:10px"><span style="font-weight:700">Orphanage Receives</span><span id="calc-recv" style="font-weight:700;color:var(--teal)">₹485</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Method</label>
+              <select class="form-input"><option>UPI / GPay / PhonePe</option><option>Credit / Debit Card</option><option>Net Banking</option><option>Wallet</option></select>
+            </div>
+            <button class="btn btn-rust" style="font-size:1rem;padding:14px 32px" onclick="processDonation()">💖 Donate Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="sub-panel" id="donor-history">
+        <div class="page-header">
+          <div class="breadcrumb">Donor Portal → <span>Donation History</span></div>
+          <h2>Donation History</h2>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table>
+              <thead><tr><th>Date</th><th>Orphanage</th><th>Amount</th><th>Fee</th><th>Method</th><th>Status</th><th>Receipt</th></tr></thead>
+              <tbody>
+                <tr><td>8 Jan 2025</td><td>Hope House</td><td>₹5,000</td><td>₹150</td><td>UPI</td><td><span class="badge green">Completed</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Downloading...')">📄</button></td></tr>
+                <tr><td>1 Jan 2025</td><td>Rainbow Kids</td><td>₹10,000</td><td>₹300</td><td>Card</td><td><span class="badge green">Completed</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Downloading...')">📄</button></td></tr>
+                <tr><td>20 Dec 2024</td><td>Sunshine Home</td><td>₹7,500</td><td>₹225</td><td>UPI</td><td><span class="badge green">Completed</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Downloading...')">📄</button></td></tr>
+                <tr><td>5 Dec 2024</td><td>Bright Future</td><td>₹5,000</td><td>₹150</td><td>Net Banking</td><td><span class="badge green">Completed</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Downloading...')">📄</button></td></tr>
+                <tr><td>1 Nov 2024</td><td>Hope House</td><td>₹10,000</td><td>₹300</td><td>Card</td><td><span class="badge green">Completed</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Downloading...')">📄</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">
+            <span class="text-muted">Total donated: <strong>₹52,000</strong></span>
+            <button class="btn btn-outline btn-sm" onclick="toast('80G Certificate downloaded!')">📄 Download 80G Certificate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSR -->
+      <div class="sub-panel" id="donor-csr">
+        <div class="page-header">
+          <div class="breadcrumb">Donor Portal → <span>CSR Dashboard</span></div>
+          <h2>CSR Impact Dashboard</h2>
+          <p>Corporate Social Responsibility reporting for TechVentures India.</p>
+        </div>
+        <div class="csr-kpi">
+          <div class="kpi-card"><div class="kpi-val">₹5.2L</div><div class="kpi-lbl">CSR Spend (FY2025)</div></div>
+          <div class="kpi-card"><div class="kpi-val">847</div><div class="kpi-lbl">Children Benefitted</div></div>
+          <div class="kpi-card"><div class="kpi-val">12</div><div class="kpi-lbl">Orphanages Supported</div></div>
+          <div class="kpi-card"><div class="kpi-val">2,300</div><div class="kpi-lbl">Volunteer Hours Enabled</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Program Wise Spend</div></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>Program</th><th>Orphanages</th><th>Spend</th><th>Impact</th></tr></thead>
+                <tbody>
+                  <tr><td>Education Sponsorship</td><td>6</td><td>₹2.1L</td><td>320 children</td></tr>
+                  <tr><td>Healthcare Camps</td><td>8</td><td>₹1.4L</td><td>480 children</td></tr>
+                  <tr><td>Infrastructure Aid</td><td>4</td><td>₹1.1L</td><td>4 homes improved</td></tr>
+                  <tr><td>Skill Development</td><td>5</td><td>₹0.6L</td><td>150 teens</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Compliance Status</div></div>
+            <div class="card-body">
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">FY2025 CSR Target Met</span><span class="badge green">✓ 104%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:100%"></div></div></div>
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Documentation Complete</span><span class="badge green">✓ 100%</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div>
+              <div style="margin-top:20px"><button class="btn btn-rust btn-sm" onclick="toast('CSR report downloaded!')">📥 Download Annual CSR Report</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browse Orphanages -->
+      <div class="sub-panel" id="donor-orphanages">
+        <div class="page-header">
+          <div class="breadcrumb">Donor Portal → <span>Browse Orphanages</span></div>
+          <h2>Verified Orphanages</h2>
+          <p>All orphanages are verified by our admin team.</p>
+        </div>
+        <div class="opp-grid">
+          <div class="opp-card">
+            <div class="opp-tag tag-teaching">Verified ✓</div>
+            <h4>Hope House Orphanage</h4>
+            <div class="org">📍 Chennai, Tamil Nadu</div>
+            <div class="opp-meta"><span>👶 47 children</span><span>⭐ 4.9/5</span><span>💰 ₹1.2L raised</span></div>
+            <div class="progress-bar mb-4"><div class="progress-fill teal" style="width:72%"></div></div>
+            <div style="font-size:.75rem;color:var(--ink-l);margin-bottom:12px">72% of monthly goal met</div>
+            <button class="btn btn-rust btn-sm" onclick="activeSidebarItem(document.querySelectorAll('#donor-dash .sidebar-item')[1]);showSubPanel('donor','donate')">Donate Now</button>
+          </div>
+          <div class="opp-card">
+            <div class="opp-tag tag-events">Verified ✓</div>
+            <h4>Rainbow Kids Home</h4>
+            <div class="org">📍 Bengaluru, Karnataka</div>
+            <div class="opp-meta"><span>👶 32 children</span><span>⭐ 4.7/5</span><span>💰 ₹85K raised</span></div>
+            <div class="progress-bar mb-4"><div class="progress-fill" style="width:55%"></div></div>
+            <div style="font-size:.75rem;color:var(--ink-l);margin-bottom:12px">55% of monthly goal met</div>
+            <button class="btn btn-rust btn-sm" onclick="activeSidebarItem(document.querySelectorAll('#donor-dash .sidebar-item')[1]);showSubPanel('donor','donate')">Donate Now</button>
+          </div>
+          <div class="opp-card">
+            <div class="opp-tag tag-medical">Urgent Need</div>
+            <h4>Bright Future Home</h4>
+            <div class="org">📍 Hyderabad, Telangana</div>
+            <div class="opp-meta"><span>👶 61 children</span><span>⭐ 4.8/5</span><span>💰 ₹40K raised</span></div>
+            <div class="progress-bar mb-4"><div class="progress-fill" style="width:28%;background:var(--rust)"></div></div>
+            <div style="font-size:.75rem;color:var(--rust);margin-bottom:12px">⚠️ Only 28% of goal met — urgent!</div>
+            <button class="btn btn-rust btn-sm" onclick="activeSidebarItem(document.querySelectorAll('#donor-dash .sidebar-item')[1]);showSubPanel('donor','donate')">Donate Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== ADMIN DASHBOARD ======================== -->
+<div class="page" id="admin-dash">
+  <div class="dashboard">
+    <div class="sidebar">
+      <div style="padding:0 16px 16px">
+        <div class="profile-widget">
+          <div class="profile-pic" style="background:var(--ink-m)">AD</div>
+          <div><div class="profile-name">Admin Panel</div><div class="profile-role">Platform Moderator</div></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Administration</div>
+        <div class="sidebar-item active" onclick="activeSidebarItem(this);showSubPanel('admin','overview')"><span class="icon">🏠</span>Overview</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('admin','verify')"><span class="icon">✅</span>Verifications<span class="sidebar-badge">8</span></div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('admin','users')"><span class="icon">👥</span>Users</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('admin','platform')"><span class="icon">📊</span>Platform Stats</div>
+        <div class="sidebar-item" onclick="activeSidebarItem(this);showSubPanel('admin','reports')"><span class="icon">🚨</span>Reports & Flags<span class="sidebar-badge">2</span></div>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto;padding-bottom:8px">
+        <div class="sidebar-item" onclick="showPage('landing')"><span class="icon">🚪</span>Back to Home</div>
+      </div>
+    </div>
+    <div class="main-content">
+      <!-- Overview -->
+      <div class="sub-panel active" id="admin-overview">
+        <div class="page-header">
+          <div class="breadcrumb">Admin Panel → <span>Overview</span></div>
+          <h2>Platform Overview</h2>
+          <p>Monitor all activity and ensure platform integrity.</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="sc-label">Total Users</div><div class="sc-value">2,847</div><div class="sc-change up">↑ +124 this week</div></div>
+          <div class="stat-card"><div class="sc-label">Orphanages</div><div class="sc-value">148</div><div class="sc-change up">↑ +6 this month</div></div>
+          <div class="stat-card"><div class="sc-label">Pending Verifications</div><div class="sc-value">8</div><div class="sc-change orange">Needs attention</div></div>
+          <div class="stat-card"><div class="sc-label">Total Donations</div><div class="sc-value">₹24L</div><div class="sc-change up">↑ This year</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Recent Sign-ups</div></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>Name</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Meera Nair</td><td><span class="badge blue">Volunteer</span></td><td>Today</td><td><span class="badge orange">Pending</span></td></tr>
+                  <tr><td>Bright Stars Home</td><td><span class="badge green">Orphanage</span></td><td>Today</td><td><span class="badge orange">Pending</span></td></tr>
+                  <tr><td>Rahul Sharma</td><td><span class="badge blue">Volunteer</span></td><td>Yesterday</td><td><span class="badge green">Verified</span></td></tr>
+                  <tr><td>InfyCSR Foundation</td><td><span class="badge orange">Donor</span></td><td>Yesterday</td><td><span class="badge green">Verified</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Platform Health</div></div>
+            <div class="card-body">
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Verified Orphanages</span><span style="font-size:.8rem;color:var(--ink-l)">93%</span></div><div class="progress-bar"><div class="progress-fill teal" style="width:93%"></div></div></div>
+              <div style="margin-bottom:14px"><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Active Volunteers</span><span style="font-size:.8rem;color:var(--ink-l)">78%</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div>
+              <div><div class="flex-between mb-4"><span style="font-size:.85rem;font-weight:600">Successful Matches</span><span style="font-size:.8rem;color:var(--ink-l)">86%</span></div><div class="progress-bar"><div class="progress-fill gold" style="width:86%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verifications -->
+      <div class="sub-panel" id="admin-verify">
+        <div class="page-header">
+          <div class="breadcrumb">Admin Panel → <span>Verifications</span></div>
+          <h2>Pending Verifications</h2>
+          <p>Review and verify orphanages and volunteers before they go live.</p>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab(this,'v-orph')">🏠 Orphanages (3)</div>
+          <div class="tab" onclick="switchTab(this,'v-vol')">🙋 Volunteers (5)</div>
+        </div>
+        <div class="tab-content active" id="v-orph">
+          <div class="verify-card">
+            <div class="msg-avatar" style="background:var(--teal);border-radius:10px;width:48px;height:48px">BS</div>
+            <div class="verify-info"><h4>Bright Stars Home</h4><p>Chennai · NGO Reg: TN-NGO-2024-0821 · 38 children · Contact: Mgr. Kamala</p></div>
+            <div class="verify-actions">
+              <button class="btn btn-teal btn-sm" onclick="verifyItem(this,'orphanage')">✓ Verify</button>
+              <button class="btn btn-outline btn-sm" onclick="toast('Document review panel opened')">📄 Docs</button>
+              <button class="btn btn-outline btn-sm" onclick="rejectItem(this)">✗ Reject</button>
+            </div>
+          </div>
+          <div class="verify-card">
+            <div class="msg-avatar" style="background:var(--rust);border-radius:10px;width:48px;height:48px">SN</div>
+            <div class="verify-info"><h4>Sunrise Nest</h4><p>Hyderabad · NGO Reg: TG-NGO-2024-0315 · 22 children · Contact: Fr. Joseph</p></div>
+            <div class="verify-actions">
+              <button class="btn btn-teal btn-sm" onclick="verifyItem(this,'orphanage')">✓ Verify</button>
+              <button class="btn btn-outline btn-sm" onclick="toast('Document review panel opened')">📄 Docs</button>
+              <button class="btn btn-outline btn-sm" onclick="rejectItem(this)">✗ Reject</button>
+            </div>
+          </div>
+          <div class="verify-card">
+            <div class="msg-avatar" style="background:var(--gold);color:var(--ink);border-radius:10px;width:48px;height:48px">KH</div>
+            <div class="verify-info"><h4>Kalyan Home</h4><p>Mumbai · NGO Reg: MH-NGO-2024-1102 · 54 children · Contact: Mgr. Lakshmi</p></div>
+            <div class="verify-actions">
+              <button class="btn btn-teal btn-sm" onclick="verifyItem(this,'orphanage')">✓ Verify</button>
+              <button class="btn btn-outline btn-sm" onclick="toast('Document review panel opened')">📄 Docs</button>
+              <button class="btn btn-outline btn-sm" onclick="rejectItem(this)">✗ Reject</button>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="v-vol">
+          <div class="verify-card">
+            <div class="msg-avatar">MN</div>
+            <div class="verify-info"><h4>Meera Nair</h4><p>Chennai · MBBS · 5 yrs experience · Skills: Medical, First Aid · ID verified</p></div>
+            <div class="verify-actions">
+              <button class="btn btn-teal btn-sm" onclick="verifyItem(this,'volunteer')">✓ Verify</button>
+              <button class="btn btn-outline btn-sm" onclick="toast('Background check initiated')">🔍 Check</button>
+              <button class="btn btn-outline btn-sm" onclick="rejectItem(this)">✗ Reject</button>
+            </div>
+          </div>
+          <div class="verify-card">
+            <div class="msg-avatar" style="background:var(--teal)">RS</div>
+            <div class="verify-info"><h4>Rohit Sinha</h4><p>Bengaluru · B.Ed Graduate · Skills: Teaching, Maths, English · Aadhar verified</p></div>
+            <div class="verify-actions">
+              <button class="btn btn-teal btn-sm" onclick="verifyItem(this,'volunteer')">✓ Verify</button>
+              <button class="btn btn-outline btn-sm" onclick="toast('Background check initiated')">🔍 Check</button>
+              <button class="btn btn-outline btn-sm" onclick="rejectItem(this)">✗ Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="sub-panel" id="admin-users">
+        <div class="page-header">
+          <div class="breadcrumb">Admin Panel → <span>Users</span></div>
+          <h2>User Management</h2>
+        </div>
+        <div class="search-bar"><span>🔍</span><input placeholder="Search users by name, email or city..." oninput="filterUsers(this.value)"/></div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table id="users-table">
+              <thead><tr><th>Name</th><th>Type</th><th>City</th><th>Joined</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="users-tbody">
+                <tr><td><strong>Arjun Kumar</strong></td><td><span class="badge blue">Volunteer</span></td><td>Bengaluru</td><td>Jan 2024</td><td><span class="badge green">Active</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Profile opened')">View</button></td></tr>
+                <tr><td><strong>Hope House</strong></td><td><span class="badge green">Orphanage</span></td><td>Chennai</td><td>Mar 2024</td><td><span class="badge green">Verified</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Profile opened')">View</button></td></tr>
+                <tr><td><strong>Priya Menon</strong></td><td><span class="badge orange">Donor</span></td><td>Mumbai</td><td>Jun 2024</td><td><span class="badge green">Active</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Profile opened')">View</button></td></tr>
+                <tr><td><strong>Meera Nair</strong></td><td><span class="badge blue">Volunteer</span></td><td>Chennai</td><td>Jan 2025</td><td><span class="badge orange">Pending</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Profile opened')">View</button></td></tr>
+                <tr><td><strong>TechVentures CSR</strong></td><td><span class="badge orange">Corporate</span></td><td>Bengaluru</td><td>Aug 2024</td><td><span class="badge green">Active</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Profile opened')">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platform Stats -->
+      <div class="sub-panel" id="admin-platform">
+        <div class="page-header">
+          <div class="breadcrumb">Admin Panel → <span>Platform Stats</span></div>
+          <h2>Platform Statistics</h2>
+        </div>
+        <div class="impact-grid" style="margin-bottom:24px">
+          <div class="impact-tile"><div class="impact-num">2,847</div><div class="impact-lbl">Total Users</div></div>
+          <div class="impact-tile"><div class="impact-num">148</div><div class="impact-lbl">Orphanages</div></div>
+          <div class="impact-tile"><div class="impact-num">12,400</div><div class="impact-lbl">Volunteer Hours</div></div>
+          <div class="impact-tile"><div class="impact-num">₹24L</div><div class="impact-lbl">Donations</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><div class="card-title">New Registrations (2025)</div></div>
+            <div class="card-body">
+              <div class="bar-chart" id="admin-bar-chart"></div>
+              <div class="bar-labels" id="admin-bar-labels"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Top Cities</div></div>
+            <div class="card-body" style="padding:0">
+              <table>
+                <thead><tr><th>City</th><th>Volunteers</th><th>Orphanages</th><th>Donations</th></tr></thead>
+                <tbody>
+                  <tr><td>Bengaluru</td><td>428</td><td>22</td><td>₹6.2L</td></tr>
+                  <tr><td>Chennai</td><td>312</td><td>18</td><td>₹4.8L</td></tr>
+                  <tr><td>Mumbai</td><td>287</td><td>15</td><td>₹7.1L</td></tr>
+                  <tr><td>Hyderabad</td><td>198</td><td>12</td><td>₹3.4L</td></tr>
+                  <tr><td>Delhi</td><td>176</td><td>10</td><td>₹2.9L</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports -->
+      <div class="sub-panel" id="admin-reports">
+        <div class="page-header">
+          <div class="breadcrumb">Admin Panel → <span>Reports & Flags</span></div>
+          <h2>Reports & Safety Flags</h2>
+          <p>Review flagged content and reported issues.</p>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="verify-card">
+              <div class="act-icon red" style="width:40px;height:40px;font-size:1.2rem">🚨</div>
+              <div class="verify-info"><h4>Report: Suspicious volunteer profile</h4><p>Reported by: Hope House · User: "test_user_42" · Reason: Unverified documents submitted</p></div>
+              <div class="verify-actions">
+                <button class="btn btn-rust btn-sm" onclick="toast('User account suspended pending review')">Suspend</button>
+                <button class="btn btn-outline btn-sm" onclick="toast('Report dismissed')">Dismiss</button>
+              </div>
+            </div>
+            <div class="verify-card">
+              <div class="act-icon orange" style="width:40px;height:40px;font-size:1.2rem">⚠️</div>
+              <div class="verify-info"><h4>Report: Misleading orphanage details</h4><p>Reported by: System · Orphanage: "ABC Trust" · Reason: Registration number mismatch</p></div>
+              <div class="verify-actions">
+                <button class="btn btn-rust btn-sm" onclick="toast('Orphanage listing paused for review')">Pause Listing</button>
+                <button class="btn btn-outline btn-sm" onclick="toast('Report dismissed')">Dismiss</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ======== PAGE ROUTER ========
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={landing:0,'volunteer-dash':1,'orphanage-dash':2,'donor-dash':3,'admin-dash':4};
+  if(map[id]!==undefined) document.querySelectorAll('.nav-btn')[map[id]]?.classList.add('active');
+  window.scrollTo(0,0);
+  // Init dashboards on navigate — ALL four fixed
+  if(id==='volunteer-dash') initVolunteerDash();
+  if(id==='orphanage-dash') initOrphanageDash();
+  if(id==='donor-dash')     initDonorDash();
+  if(id==='admin-dash')     initAdminDash();
+}
+
+// ======== SUB PANELS — FIXED: scoped to active page only ========
+function showSubPanel(prefix, name){
+  const page = document.querySelector('.page.active');
+  if(!page) return;
+  page.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById(prefix+'-'+name);
+  if(el) el.classList.add('active');
+  // lazy-init charts
+  if(prefix==='vol'&&name==='impact')     initBarChart('vol-bar-chart','vol-bar-labels',[4,8,6,10,9,12,14,8,6,11,10,9],MONTHS,false);
+  if(prefix==='orph'&&name==='impact')    initBarChart('orph-bar-chart','orph-bar-labels',[18,24,22,30,28,35,38,30,26,40,36,32],MONTHS,true);
+  if(prefix==='admin'&&name==='platform') initBarChart('admin-bar-chart','admin-bar-labels',[120,180,210,165,240,220,310,285,260,340,310,295],MONTHS,false);
+}
+
+const MONTHS=['J','F','M','A','M','J','J','A','S','O','N','D'];
+
+// ======== SIDEBAR ========
+function activeSidebarItem(el){
+  el.closest('.sidebar').querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ======== TABS ========
+function switchTab(tabEl, contentId){
+  tabEl.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tabEl.classList.add('active');
+  const panel = tabEl.closest('.sub-panel,.main-content') || document.body;
+  panel.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  const target = document.getElementById(contentId);
+  if(target) target.classList.add('active');
+}
+
+// ======== REG TABS ========
+function switchRegTab(tabEl, formId){
+  tabEl.closest('.reg-tabs').querySelectorAll('.reg-tab').forEach(t=>t.classList.remove('active'));
+  tabEl.classList.add('active');
+  ['vol-form','orph-form','donor-form'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('hidden', id!==formId);
+  });
+}
+
+// ======== TOAST ========
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ======== MODAL ========
+function openModal(title,desc){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-desc').textContent=desc;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function submitApplication(){closeModal();toast('✓ Application submitted! The orphanage will review it shortly.')}
+
+// ======== OPPORTUNITIES ========
+const OPPS=[
+  {tag:'Teaching',cls:'tag-teaching',title:'Math Tutoring (Gr 4-6)',org:'Sunshine Home, Bengaluru',time:'Sat 9AM–11AM',children:18,match:97},
+  {tag:'Teaching',cls:'tag-teaching',title:'English Reading Club',org:'Star Orphanage, Chennai',time:'Sun 10AM–12PM',children:14,match:91},
+  {tag:'Medical',cls:'tag-medical',title:'General Health Checkup',org:'Hope House, Chennai',time:'15 Jan 2025',children:47,match:78},
+  {tag:'Events',cls:'tag-events',title:'Annual Sports Day Coordinator',org:'Rainbow Kids, Bengaluru',time:'20 Jan 2025',children:32,match:88},
+  {tag:'Teaching',cls:'tag-teaching',title:'Science Lab Sessions',org:'Bright Future, Bengaluru',time:'Sat 2PM–4PM',children:20,match:95},
+  {tag:'Sports',cls:'tag-sports',title:'Cricket Coaching',org:'New Hope Home, Mysore',time:'Sun 8AM–10AM',children:25,match:82},
+  {tag:'Teaching',cls:'tag-teaching',title:'Hindi Language Practice',org:'Kalyan Home, Mumbai',time:'Weekday 4PM',children:15,match:74},
+  {tag:'Events',cls:'tag-events',title:'Diwali Celebration Help',org:'Sunrise Nest, Hyderabad',time:'22 Jan 2025',children:38,match:85},
+];
+
+let currentFilter='All';
+let currentSearch='';
+
+function renderOpps(){
+  const grid=document.getElementById('opp-grid');
+  if(!grid) return;
+  const filtered=OPPS.filter(o=>{
+    const matchCat = currentFilter==='All' || o.tag===currentFilter;
+    const matchSearch = !currentSearch || o.title.toLowerCase().includes(currentSearch) || o.org.toLowerCase().includes(currentSearch);
+    return matchCat && matchSearch;
+  });
+  if(!filtered.length){grid.innerHTML='<p style="color:var(--ink-l);padding:20px 0">No opportunities found. Try a different filter.</p>';return;}
+  grid.innerHTML=filtered.map(o=>`
+    <div class="opp-card">
+      <div class="opp-tag ${o.cls}">${o.tag}</div>
+      <h4>${o.title}</h4>
+      <div class="org">📍 ${o.org}</div>
+      <div class="opp-meta"><span>🕐 ${o.time}</span><span>👶 ${o.children} children</span></div>
+      <div class="match-score"><span style="font-size:.78rem;color:var(--ink-l)">Match Score</span><span class="match-pct">${o.match}% Match ${o.match>=95?'✦':''}</span></div>
+      <button class="btn btn-rust btn-sm" onclick="openModal('Apply: ${o.title}','Describe your experience relevant to this opportunity and your availability.')">Apply Now</button>
+    </div>
+  `).join('');
+}
+
+function filterOpps(v){currentSearch=v.toLowerCase();renderOpps();}
+
+function toggleChip(el, tag){
+  el.closest('.filter-chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter=tag;
+  renderOpps();
+}
+
+// ======== CHAT ========
+function sendMsg(prefix){
+  const inp=document.getElementById(prefix+'-chat-input');
+  const msgs=document.getElementById(prefix+'-chat-messages');
+  if(!inp||!msgs||!inp.value.trim()) return;
+  const b=document.createElement('div');
+  b.className='chat-bubble bubble-out';
+  b.innerHTML=inp.value+'<div class="bubble-meta">You · just now</div>';
+  msgs.appendChild(b);
+  msgs.scrollTop=msgs.scrollHeight;
+  inp.value='';
+  setTimeout(()=>{
+    const r=document.createElement('div');
+    r.className='chat-bubble bubble-in';
+    r.innerHTML='Thanks for the message! We\'ll get back to you soon. 😊<div class="bubble-meta">just now</div>';
+    msgs.appendChild(r);
+    msgs.scrollTop=msgs.scrollHeight;
+  },1200);
+}
+
+function loadChat(name, prefix){
+  const titleEl=document.getElementById(prefix+'-chat-title');
+  if(titleEl) titleEl.textContent=name;
+  toast('Chat with '+name+' loaded');
+}
+
+// ======== BAR CHARTS ========
+function initBarChart(chartId,labelsId,data,labels,teal){
+  const chart=document.getElementById(chartId);
+  const lblEl=document.getElementById(labelsId);
+  if(!chart||!lblEl) return;
+  const max=Math.max(...data);
+  chart.innerHTML=data.map((v,i)=>`<div class="bar ${teal?'teal':''}" style="height:${Math.round((v/max)*100)}%" title="${labels[i]}: ${v}"></div>`).join('');
+  lblEl.innerHTML=labels.map(l=>`<div class="bar-label">${l}</div>`).join('');
+}
+
+// ======== COUNTER ANIMATION ========
+function animateCounter(id,target,suffix=''){
+  const el=document.getElementById(id);
+  if(!el) return;
+  let n=0; const step=Math.ceil(target/60);
+  const iv=setInterval(()=>{
+    n=Math.min(n+step,target);
+    el.textContent=n.toLocaleString('en-IN')+suffix;
+    if(n>=target) clearInterval(iv);
+  },24);
+}
+
+// ======== REGISTRATION ========
+function registerUser(type){
+  const names={volunteer:'Volunteer',orphanage:'Orphanage',donor:'Donor'};
+  toast('✓ '+names[type]+' account created! Redirecting...');
+  setTimeout(()=>{
+    if(type==='volunteer') showPage('volunteer-dash');
+    else if(type==='orphanage') showPage('orphanage-dash');
+    else showPage('donor-dash');
+  },1400);
+}
+
+// ======== DONATION ========
+let donationAmt=500;
+function selectTier(el,amount){
+  document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  const cg=document.getElementById('custom-amount-group');
+  if(amount==='custom'){cg.style.display='block';}
+  else{cg.style.display='none';donationAmt=amount;updateDonationCalc();}
+}
+function updateDonationCalc(){
+  const ca=document.getElementById('custom-amount');
+  if(ca&&ca.value) donationAmt=parseInt(ca.value)||500;
+  const fee=Math.round(donationAmt*0.03);
+  const recv=donationAmt-fee;
+  const fmt=n=>'₹'+n.toLocaleString('en-IN');
+  const a=document.getElementById('calc-amount');
+  const f=document.getElementById('calc-fee');
+  const r=document.getElementById('calc-recv');
+  if(a) a.textContent=fmt(donationAmt);
+  if(f) f.textContent=fmt(fee);
+  if(r) r.textContent=fmt(recv);
+}
+function processDonation(){toast('✓ Donation of ₹'+donationAmt.toLocaleString('en-IN')+' processed! Receipt sent to email.')}
+
+// ======== POST REQUIREMENT ========
+function postRequirement(){toast('✓ Requirement posted! Matching volunteers will be notified automatically.')}
+
+// ======== ADMIN ACTIONS ========
+function verifyItem(btn,type){
+  const card=btn.closest('.verify-card');
+  card.style.opacity='.4'; card.style.pointerEvents='none';
+  toast('✓ '+type.charAt(0).toUpperCase()+type.slice(1)+' verified successfully!');
+}
+function rejectItem(btn){
+  const card=btn.closest('.verify-card');
+  card.style.opacity='.4'; card.style.pointerEvents='none';
+  toast('⚠️ Application rejected and notification sent.');
+}
+function approveApp(btn, statusId){
+  const badge=document.getElementById(statusId);
+  if(badge){badge.className='badge green';badge.textContent='✓ Approved';}
+  const row=btn.closest('tr');
+  if(row){
+    const lastCell=row.querySelector('td:last-child');
+    if(lastCell) lastCell.innerHTML='<button class="btn btn-outline btn-sm" onclick="toast(\'Profile opened\')">View</button>';
+  }
+  toast('✓ Volunteer application approved!');
+}
+function declineApp(btn, statusId){
+  const badge=document.getElementById(statusId);
+  if(badge){badge.className='badge red';badge.textContent='✗ Declined';}
+  const row=btn.closest('tr');
+  if(row){
+    const lastCell=row.querySelector('td:last-child');
+    if(lastCell) lastCell.innerHTML='';
+  }
+  toast('Application declined.');
+}
+
+// ======== USER SEARCH ========
+function filterUsers(v){
+  const q=v.toLowerCase();
+  document.querySelectorAll('#users-tbody tr').forEach(row=>{
+    row.style.display=row.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+
+// ======== INIT FUNCTIONS — ALL FOUR PRESENT ========
+function initVolunteerDash(){
+  renderOpps();
+  initBarChart('vol-bar-chart','vol-bar-labels',[4,8,6,10,9,12,14,8,6,11,10,9],MONTHS,false);
+}
+function initOrphanageDash(){
+  initBarChart('orph-bar-chart','orph-bar-labels',[18,24,22,30,28,35,38,30,26,40,36,32],MONTHS,true);
+}
+function initDonorDash(){
+  // donor overview is static data — nothing to init
+  // ensure first sub-panel is active
+  const page=document.getElementById('donor-dash');
+  if(page){
+    page.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+    const first=document.getElementById('donor-overview');
+    if(first) first.classList.add('active');
+    page.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+    const firstSide=page.querySelector('.sidebar-item');
+    if(firstSide) firstSide.classList.add('active');
+  }
+}
+function initAdminDash(){
+  initBarChart('admin-bar-chart','admin-bar-labels',[120,180,210,165,240,220,310,285,260,340,310,295],MONTHS,false);
+  const page=document.getElementById('admin-dash');
+  if(page){
+    page.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+    const first=document.getElementById('admin-overview');
+    if(first) first.classList.add('active');
+    page.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+    const firstSide=page.querySelector('.sidebar-item');
+    if(firstSide) firstSide.classList.add('active');
+  }
+}
+
+// ======== LANDING COUNTERS ========
+window.addEventListener('DOMContentLoaded',()=>{
+  animateCounter('ctr-children',4823);
+  animateCounter('ctr-vol',2847);
+  animateCounter('ctr-orph',148);
+  animateCounter('ctr-hrs',12400);
+});
+</script>
+</body>
+  </html>
